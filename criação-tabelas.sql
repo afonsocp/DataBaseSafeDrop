@@ -1,5 +1,5 @@
 -- ========================================
--- 7. CONSULTAS SQL COMPLEXAS (RELATÓRIOS) 
+-- 1. CRIAÇÃO DE TABELAS
 -- ========================================
 
 -- Tabela: usuarios
@@ -31,6 +31,7 @@ CREATE TABLE ocorrencias (
     nivel_risco VARCHAR2(20) NOT NULL 
         CONSTRAINT chk_nivel_risco CHECK (nivel_risco IN ('baixo', 'moderado', 'alto')),
     status VARCHAR2(20) NOT NULL
+        CONSTRAINT chk_status CHECK (status IN ('em andamento', 'resolvido'))
 );
 
 -- Tabela: alertas
@@ -168,63 +169,66 @@ END;
 /
 
 
--- INSERÇÕES USANDO PROCEDURES PARA A TABELA: usuarios
-BEGIN
-  inserir_usuario('Ana Lima', 'ana@email.com', 'senha123', 'cidadao');
-  inserir_usuario('Carlos Souza', 'carlos@email.com', 'senha123', 'voluntario');
-  inserir_usuario('João Pedro', 'joao@email.com', 'senha123', 'orgao_publico');
-  inserir_usuario('Maria Clara', 'maria@email.com', 'senha123', 'cidadao');
-  inserir_usuario('Lucas Rocha', 'lucas@email.com', 'senha123', 'voluntario');
-END;
-/
+-- INSERÇÕES NA TABELA: usuarios
+INSERT INTO usuarios (nome, email, senha, tipo_usuario) VALUES ('Ana Lima', 'ana@email.com', 'senha123', 'cidadao');
+INSERT INTO usuarios (nome, email, senha, tipo_usuario) VALUES ('Carlos Souza', 'carlos@email.com', 'senha123', 'voluntario');
+INSERT INTO usuarios (nome, email, senha, tipo_usuario) VALUES ('João Pedro', 'joao@email.com', 'senha123', 'orgao_publico');
+INSERT INTO usuarios (nome, email, senha, tipo_usuario) VALUES ('Maria Clara', 'maria@email.com', 'senha123', 'cidadao');
+INSERT INTO usuarios (nome, email, senha, tipo_usuario) VALUES ('Lucas Rocha', 'lucas@email.com', 'senha123', 'voluntario');
 
--- INSERÇÕES USANDO PROCEDURES PARA A TABELA: tipos_ocorrencia
-BEGIN
-  inserir_tipo_ocorrencia('Enchente');
-  inserir_tipo_ocorrencia('Deslizamento');
-  inserir_tipo_ocorrencia('Incêndio');
-  inserir_tipo_ocorrencia('Tempestade');
-  inserir_tipo_ocorrencia('Terremoto');
-END;
-/
+-- INSERÇÕES NA TABELA: tipos_ocorrencia
+INSERT INTO tipos_ocorrencia (nome) VALUES ('Enchente');
+INSERT INTO tipos_ocorrencia (nome) VALUES ('Deslizamento');
+INSERT INTO tipos_ocorrencia (nome) VALUES ('Incêndio');
+INSERT INTO tipos_ocorrencia (nome) VALUES ('Tempestade');
+INSERT INTO tipos_ocorrencia (nome) VALUES ('Terremoto');
 
--- INSERÇÕES USANDO PROCEDURES PARA A TABELA: ocorrencias
-BEGIN
-  inserir_ocorrencia(1, 1, 'Rua alagada', -23.5612, -46.6558, SYSTIMESTAMP, 'alto', 'ativo');
-  inserir_ocorrencia(2, 2, 'Deslizamento parcial', -23.5600, -46.6560, SYSTIMESTAMP, 'moderado', 'ativo');
-  inserir_ocorrencia(3, 3, 'Fogo em vegetação', -23.5590, -46.6540, SYSTIMESTAMP, 'alto', 'resolvido');
-  inserir_ocorrencia(4, 4, 'Ventos fortes derrubaram árvores', -23.5580, -46.6530, SYSTIMESTAMP, 'baixo', 'ativo');
-  inserir_ocorrencia(5, 5, 'Tremor leve sentido no bairro', -23.5570, -46.6520, SYSTIMESTAMP, 'moderado', 'em análise');
-END;
-/
+-- INSERÇÕES NA TABELA: ocorrencias
+INSERT INTO ocorrencias (id_usuario, id_tipo, descricao, latitude, longitude, data_ocorrencia, nivel_risco, status)
+VALUES (1, 1, 'Rua alagada', -23.5612, -46.6558, SYSTIMESTAMP, 'alto', 'ativo');
+INSERT INTO ocorrencias (id_usuario, id_tipo, descricao, latitude, longitude, data_ocorrencia, nivel_risco, status)
+VALUES (2, 2, 'Deslizamento parcial', -23.5600, -46.6560, SYSTIMESTAMP, 'moderado', 'ativo');
+INSERT INTO ocorrencias (id_usuario, id_tipo, descricao, latitude, longitude, data_ocorrencia, nivel_risco, status)
+VALUES (3, 3, 'Fogo em vegetação', -23.5590, -46.6540, SYSTIMESTAMP, 'alto', 'resolvido');
+INSERT INTO ocorrencias (id_usuario, id_tipo, descricao, latitude, longitude, data_ocorrencia, nivel_risco, status)
+VALUES (4, 4, 'Ventos fortes derrubaram árvores', -23.5580, -46.6530, SYSTIMESTAMP, 'baixo', 'ativo');
+INSERT INTO ocorrencias (id_usuario, id_tipo, descricao, latitude, longitude, data_ocorrencia, nivel_risco, status)
+VALUES (5, 5, 'Tremor leve sentido no bairro', -23.5570, -46.6520, SYSTIMESTAMP, 'moderado', 'em análise');
 
--- INSERÇÕES USANDO PROCEDURES PARA A TABELA: alertas
-BEGIN
-  inserir_alerta('Alerta de Enchente', 'Evite transitar pela região afetada', 'alta', 1, 'sistema');
-  inserir_alerta('Deslizamento de terra', 'Risco de novos deslizamentos', 'media', 2, 'manual');
-  inserir_alerta('Foco de incêndio', 'Área isolada pelos bombeiros', 'alta', 3, 'iot');
-  inserir_alerta('Tempestade severa', 'Permaneça em locais cobertos', 'baixa', 4, 'sistema');
-  inserir_alerta('Tremor registrado', 'Sem danos até o momento', 'media', 5, 'manual');
-END;
-/
+-- INSERÇÕES NA TABELA: alertas
+INSERT INTO alertas (titulo, mensagem, nivel_alerta, id_ocorrencia, origem)
+VALUES ('Alerta de Enchente', 'Evite transitar pela região afetada', 'alta', 1, 'sistema');
+INSERT INTO alertas (titulo, mensagem, nivel_alerta, id_ocorrencia, origem)
+VALUES ('Deslizamento de terra', 'Risco de novos deslizamentos', 'media', 2, 'manual');
+INSERT INTO alertas (titulo, mensagem, nivel_alerta, id_ocorrencia, origem)
+VALUES ('Foco de incêndio', 'Área isolada pelos bombeiros', 'alta', 3, 'iot');
+INSERT INTO alertas (titulo, mensagem, nivel_alerta, id_ocorrencia, origem)
+VALUES ('Tempestade severa', 'Permaneça em locais cobertos', 'baixa', 4, 'sistema');
+INSERT INTO alertas (titulo, mensagem, nivel_alerta, id_ocorrencia, origem)
+VALUES ('Tremor registrado', 'Sem danos até o momento', 'media', 5, 'manual');
 
--- INSERÇÕES USANDO PROCEDURES PARA A TABELA: abrigos
-BEGIN
-  inserir_abrigo('Abrigo Central', 'Rua das Flores, 100', 100, 75, '11999990000', 'ativo');
-  inserir_abrigo('Abrigo Zona Sul', 'Av. Sul, 200', 150, 120, '11888887777', 'ativo');
-  inserir_abrigo('Abrigo Norte', 'Rua da Paz, 300', 80, 65, '11777776666', 'ativo');
-  inserir_abrigo('Abrigo Leste', 'Travessa Esperança, 50', 90, 45, '11666665555', 'lotado');
-  inserir_abrigo('Abrigo Oeste', 'Rua das Árvores, 25', 60, 10, '11555554444', 'ativo');
-END;
-/
+-- INSERÇÕES NA TABELA: abrigos
+INSERT INTO abrigos (nome, endereco, capacidade_total, vagas_disponiveis, telefone, status)
+VALUES ('Abrigo Central', 'Rua das Flores, 100', 100, 75, '11999990000', 'ativo');
+INSERT INTO abrigos (nome, endereco, capacidade_total, vagas_disponiveis, telefone, status)
+VALUES ('Abrigo Zona Sul', 'Av. Sul, 200', 150, 120, '11888887777', 'ativo');
+INSERT INTO abrigos (nome, endereco, capacidade_total, vagas_disponiveis, telefone, status)
+VALUES ('Abrigo Norte', 'Rua da Paz, 300', 80, 65, '11777776666', 'ativo');
+INSERT INTO abrigos (nome, endereco, capacidade_total, vagas_disponiveis, telefone, status)
+VALUES ('Abrigo Leste', 'Travessa Esperança, 50', 90, 45, '11666665555', 'lotado');
+INSERT INTO abrigos (nome, endereco, capacidade_total, vagas_disponiveis, telefone, status)
+VALUES ('Abrigo Oeste', 'Rua das Árvores, 25', 60, 10, '11555554444', 'ativo');
 
--- INSERÇÕES USANDO PROCEDURES PARA A TABELA: checkins_abrigos
-BEGIN
-  inserir_checkin(1, 1, SYSTIMESTAMP);
-  inserir_checkin(2, 2, SYSTIMESTAMP);
-  inserir_checkin(3, 3, SYSTIMESTAMP);
-  inserir_checkin(4, 4, SYSTIMESTAMP);
-  inserir_checkin(5, 5, SYSTIMESTAMP);
-END;
-/
+-- INSERÇÕES NA TABELA: checkins_abrigos
+INSERT INTO checkins_abrigos (id_usuario, id_abrigo, data_checkin)
+VALUES (1, 1, SYSTIMESTAMP);
+INSERT INTO checkins_abrigos (id_usuario, id_abrigo, data_checkin)
+VALUES (2, 2, SYSTIMESTAMP);
+INSERT INTO checkins_abrigos (id_usuario, id_abrigo, data_checkin)
+VALUES (3, 3, SYSTIMESTAMP);
+INSERT INTO checkins_abrigos (id_usuario, id_abrigo, data_checkin)
+VALUES (4, 4, SYSTIMESTAMP);
+INSERT INTO checkins_abrigos (id_usuario, id_abrigo, data_checkin)
+VALUES (5, 5, SYSTIMESTAMP);
+
 
