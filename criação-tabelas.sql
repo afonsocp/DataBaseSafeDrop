@@ -55,7 +55,7 @@ CREATE TABLE abrigos (
     vagas_disponiveis NUMBER NOT NULL,
     telefone VARCHAR2(20),
     status VARCHAR2(20) NOT NULL
-        CONSTRAINT chk_status CHECK (status IN ('em andamento', 'resolvido'))
+        CONSTRAINT chk_status CHECK (status IN ('disponivel', 'lotado', 'inativo'))
 );
 
 -- Tabela: checkins_abrigos
